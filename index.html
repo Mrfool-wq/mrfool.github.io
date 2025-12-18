@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MrFool | The Creative Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #08080a;
+            --card: #121216;
+            --primary: #00ff9d; /* Tech Green */
+            --secondary: #bd00ff; /* Anime Purple */
+            --sport: #00ccff; /* Sports Blue */
+            --text: #ffffff;
+            --gray: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Courier New', monospace; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- HERO SECTION --- */
+        header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a1a2e 0%, var(--bg) 90%);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 4rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px var(--secondary);
+        }
+
+        .typing-container {
+            font-size: 1.2rem;
+            color: var(--primary);
+            height: 30px;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            animation: bounce 2s infinite;
+            color: var(--gray);
+            font-size: 1.5rem;
+        }
+
+        /* --- SECTIONS --- */
+        section { padding: 80px 20px; max-width: 1100px; margin: 0 auto; }
+        
+        h2 {
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2::after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 4px;
+            background: var(--primary);
+            margin-top: 10px;
+        }
+
+        /* --- IDENTITY CARDS (About & Interests) --- */
+        .identity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .info-card {
+            background: var(--card);
+            padding: 30px;
+            border-left: 3px solid var(--gray);
+            transition: 0.3s;
+        }
+        
+        .info-card:hover { transform: translateY(-5px); }
+
+        .info-card.anime { border-color: var(--secondary); }
+        .info-card.sport { border-color: var(--sport); }
+        .info-card.tech { border-color: var(--primary); }
+
+        .info-card h3 { font-size: 1.5rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+
+        .tags { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; }
+        .tag { font-size: 0.8rem; padding: 4px 10px; background: #222; border-radius: 4px; }
+
+        /* --- PROJECTS GRID (Bots) --- */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .bot-card {
+            background: var(--card);
+            padding: 25px;
+            border: 1px solid #222;
+            transition: 0.3s;
+        }
+
+        .bot-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.1);
+        }
+
+        .bot-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .bot-title { font-size: 1.3rem; font-weight: bold; color: #fff; }
+        
+        .badge { font-size: 0.7rem; padding: 3px 8px; border-radius: 3px; font-weight: bold; text-transform: uppercase; }
+        .b-util { border: 1px solid #00ccff; color: #00ccff; }
+        .b-fun { border: 1px solid #ffaa00; color: #ffaa00; }
+        .b-mod { border: 1px solid #ff4444; color: #ff4444; }
+        .b-eco { border: 1px solid #00ff00; color: #00ff00; }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 20px;
+            border: 1px solid #444;
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .btn:hover { background: var(--primary); color: #000; border-color: var(--primary); }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 60px;
+            border-top: 1px solid #222;
+            color: #666;
+            background: #000;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        .cursor { animation: blink 1s infinite; }
+        
+        @media (max-width: 600px) { h1 { font-size: 2.5rem; } }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <h1>MR FOOL</h1>
+        <div class="typing-container">
+            > I am a <span id="text"></span><span class="cursor">_</span>
+        </div>
+        <div class="scroll-down"><i class="fa-solid fa-chevron-down"></i></div>
+    </header>
+
+    <!-- PHILOSOPHY & INTERESTS -->
+    <section id="about">
+        <h2>// THE_IDENTITY</h2>
+        
+        <!-- Philosophy Card -->
+        <div class="info-card tech" style="margin-bottom: 30px; border-left: 3px solid #fff;">
+            <h3><i class="fa-solid fa-brain"></i> Who is "Mr Fool"?</h3>
+            <p>
+                In the Tarot, "The Fool" represents new beginnings, unlimited potential, and the courage to take a leap of faith. 
+                I embody this by constantly learning, breaking things, and building them better. I don't just write code; I explore what's possible.
+            </p>
+        </div>
+
+        <div class="identity-grid">
+            
+            <!-- Tech Card -->
+            <div class="info-card tech">
+                <h3><i class="fa-solid fa-terminal" style="color: var(--primary);"></i> The Developer</h3>
+                <p>My playground is the terminal. I build complex automation systems on Arch Linux and Termux.</p>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Linux</span>
+                    <span class="tag">Discord API</span>
+                    <span class="tag">Automation</span>
+                </div>
+            </div>
+
+            <!-- Anime Card -->
+            <div class="info-card anime">
+                <h3><i class="fa-solid fa-khanda" style="color: var(--secondary);"></i> The Otaku</h3>
+                <p>Anime isn't just entertainment; it's inspiration. My projects (Minato, Brook, Obito) are tributes to the worlds I love.</p>
+                <div class="tags">
+                    <span class="tag" style="color: yellow;">One Piece</span>
+                    <span class="tag" style="color: orange;">Naruto</span>
+                    <span class="tag" style="color: pink;">Bleach</span>
+                </div>
+            </div>
+
+            <!-- Sports Card -->
+            <div class="info-card sport">
+                <h3><i class="fa-solid fa-futbol" style="color: var(--sport);"></i> The Fan</h3>
+                <p>When I'm not coding, I'm analyzing the game. Strategy in sports is just like logic in code.</p>
+                <div class="tags">
+                    <span class="tag">Football (Tactics)</span>
+                    <span class="tag">Cricket</span>
+                    <span class="tag">Gaming (RDR2)</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+        <h2>// THE_ARSENAL</h2>
+        <div class="project-grid">
+
+            <!-- MINATO -->
+            <div class="bot-card">
+                <div class="bot-header">
+                    <span class="bot-title"><i class="fa-solid fa-bolt" style="color: yellow;"></i> Minato</span>
+                    <span class="badge b-util">Utility</span>
+                </div>
+                <p>The "Yellow Flash." Instant teleportation & speed tools.</p>
+                <a href="#" class="btn">VIEW</a>
+            </div>
+
+            <!-- BROOK -->
+            <div class="bot-card">
+                <div class="bot-header">
+                    <span class="bot-title"><i class="fa-solid fa-skull" style="color: #bd00ff;"></i> Brook</span>
+                    <span class="badge b-util">Track + Voice</span>
+                </div>
+                <p>The Soul King. Advanced invite tracking & VoiceMaster.</p>
+                <a href="#" class="btn">STATS</a>
+            </div>
+
+            <!-- OBITO -->
+            <div class="bot-card">
+                <div class="bot-header">
+                    <span class="bot-title"><i class="fa-solid fa-mask" style="color: #ff4444;"></i> Obito</span>
+                    <span class="badge b-mod">Mod + Welcome</span>
+                </div>
+                <p>The Gatekeeper. Custom welcomer & mass-ban systems.</p>
+                <a href="#" class="btn">INVITE</a>
+            </div>
+
+            <!-- KAKASHI -->
+            <div class="bot-card">
+                <div class="bot-header">
+                    <span class="bot-title"><i class="fa-solid fa-eye" style="color: #ff0055;"></i> Kakashi</span>
+                    <span class="badge b-mod">Security</span>
+                </div>
+                <p>The Copy Ninja. Chat mirroring & audit logging.</p>
+                <a href="#" class="btn">LOGS</a>
+            </div>
+
+            <!-- USSOP -->
+            <div class="bot-card">
+                <div class="bot-header">
+                    <span class="bot-title"><i class="fa-solid fa-bullseye" style="color: orange;"></i> Ussop</span>
+                    <span class="badge b-fun">Fun & RPG</span>
+                </div>
+                <p>God Ussop. Sniper RNG games & truth/lie minigames.</p>
+                <a href="#" class="btn">PLAY</a>
+            </div>
+
+            <!-- TICKET -->
+            <div class="bot-card">
+                <div class="bot-header">
+                    <span class="bot-title"><i class="fa-solid fa-ticket" style="color: #00ccff;"></i> Ticket Bot</span>
+                    <span class="badge b-util">Support</span>
+                </div>
+                <p>Enterprise ticketing with HTML transcripts.</p>
+                <a href="#" class="btn">GET</a>
+            </div>
+
+            <!-- S.M.T.S -->
+            <div class="bot-card">
+                <div class="bot-header">
+                    <span class="bot-title"><i class="fa-solid fa-chart-line" style="color: #00ff9d;"></i> S.M.T.S</span>
+                    <span class="badge b-eco">Economy</span>
+                </div>
+                <p>Stock Market Trading Simulator. Live crypto economy.</p>
+                <a href="#" class="btn">TRADE</a>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <p>MR FOOL © 2025</p>
+        <p style="font-size: 0.8rem; margin-top: 10px; color: #444;">"Stay Foolish, Stay Hungry."</p>
+    </footer>
+
+    <!-- Typing Script -->
+    <script>
+        const textElement = document.getElementById("text");
+        const words = ["Developer", "Bot Maker", "Otaku", "Sports Fan", "Creator"];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function type() {
+            const currentWord = words[wordIndex];
+            
+            if (isDeleting) {
+                textElement.textContent = currentWord.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                textElement.textContent = currentWord.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentWord.length) {
+                isDeleting = true;
+                setTimeout(type, 2000); // Pause at end
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                setTimeout(type, 500); // Pause before new word
+            } else {
+                setTimeout(type, isDeleting ? 100 : 200);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", type);
+    </script>
+</body>
+</html>

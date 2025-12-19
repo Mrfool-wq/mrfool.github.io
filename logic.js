@@ -4,27 +4,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const sections = document.querySelectorAll('.page-section');
     const slider = document.querySelector('.nav-slider');
     
-    const navMiddle = document.querySelector('.nav-middle');
-    const navBottom = document.querySelector('.nav-bottom');
-
     function moveSlider(targetBtn) {
         slider.style.opacity = '1';
         
+        const navbar = document.querySelector('.navbar');
+        const navRect = navbar.getBoundingClientRect();
+        const btnRect = targetBtn.getBoundingClientRect();
+        
         if(window.innerWidth > 900) {
-            let topPosition = 0;
-            if (navMiddle.contains(targetBtn)) {
-                 topPosition = targetBtn.offsetTop + navMiddle.offsetTop;
-            } else if (navBottom.contains(targetBtn)) {
-                 topPosition = targetBtn.offsetTop + navBottom.offsetTop;
-            }
-            slider.style.top = `${topPosition}px`; 
+            // Desktop: Vertical Calculation
+            // Calculate Top relative to navbar container
+            const relativeTop = btnRect.top - navRect.top;
+            
+            slider.style.top = `${relativeTop}px`; 
             slider.style.left = '50%'; 
             slider.style.transform = 'translateX(-50%)';
             slider.style.width = '50px'; slider.style.height = '50px';
         } else {
-            const rect = targetBtn.getBoundingClientRect();
-            const parentRect = document.querySelector('.navbar').getBoundingClientRect();
-            slider.style.left = `${rect.left - parentRect.left}px`;
+            // Mobile: Horizontal Calculation
+            // Calculate Left relative to navbar container
+            const relativeLeft = btnRect.left - navRect.left;
+            
+            slider.style.left = `${relativeLeft}px`;
             slider.style.top = '50%'; slider.style.transform = 'translateY(-50%)';
             slider.style.width = '40px'; slider.style.height = '40px';
         }

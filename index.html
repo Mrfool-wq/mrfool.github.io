@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mr Fool | Shadow Architect</title>
-    <!-- NEW FONTS: Chakra Petch (Tech/Futuristic) & Inter (Clean) -->
+    <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -28,7 +28,6 @@
     <nav class="navbar">
         <div class="nav-slider"></div>
         <div class="brand pc-only">
-            <!-- AVATAR: Uses avatar.jpg if exists, otherwise shows icon -->
             <div class="avatar-container">
                 <img src="avatar.jpg" alt="Mr Fool" class="avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
                 <div class="avatar-fallback"><i class="fas fa-user-astronaut"></i></div>
@@ -56,12 +55,9 @@
         <section id="home" class="page-section active">
             
             <div class="hero-wrapper fade-in-up">
-                <!-- Hero Text -->
                 <div class="hero-content">
                     <div class="status-badge"><span class="dot pulse"></span> Systems Online</div>
-                    
                     <h1 class="hero-title glitch" data-text="Shadow Architect">Shadow Architect</h1>
-                    
                     <p class="hero-text">
                         I build the invisible backbone of digital communities. From advanced <strong>Discord Automation</strong> to secure <strong>Linux Infrastructure</strong>, my work ensures stability from the shadows.
                     </p>
@@ -83,7 +79,6 @@
                     </div>
                 </div>
 
-                <!-- Floating Transmission Box -->
                 <div class="transmission-box glass perpetual-float delay-1">
                     <div class="box-header">
                         <i class="fas fa-satellite-dish pulse-icon"></i> Incoming Transmission
@@ -102,7 +97,6 @@
                     <i class="fab fa-python"></i> <i class="fab fa-js"></i> <i class="fab fa-docker"></i>
                     <i class="fab fa-linux"></i> <i class="fab fa-rust"></i> <i class="fab fa-git-alt"></i>
                     <i class="fas fa-database"></i> <i class="fab fa-aws"></i>
-                    <!-- Duplicate -->
                     <i class="fab fa-python"></i> <i class="fab fa-js"></i> <i class="fab fa-docker"></i>
                     <i class="fab fa-linux"></i> <i class="fab fa-rust"></i> <i class="fab fa-git-alt"></i>
                     <i class="fas fa-database"></i> <i class="fab fa-aws"></i>
@@ -125,13 +119,26 @@
             <!-- FAQ Section -->
             <div class="faq-section stagger-container">
                 <h2 class="section-title">System Protocols (FAQ)</h2>
+                
                 <div class="faq-item glass">
                     <div class="faq-question"><span>Do you accept freelance commissions?</span><i class="fas fa-chevron-down"></i></div>
                     <div class="faq-answer"><p>Yes. I specialize in custom Discord bots and Linux server setup. Contact me via Discord for a quote.</p></div>
                 </div>
+                
                 <div class="faq-item glass">
                     <div class="faq-question"><span>What hosting do you recommend?</span><i class="fas fa-chevron-down"></i></div>
                     <div class="faq-answer"><p>For beginners, Oracle Free Tier or Hetzner. For production, I use optimized VPS clusters running Arch or Debian.</p></div>
+                </div>
+
+                <!-- NEW QUESTIONS ADDED -->
+                <div class="faq-item glass">
+                    <div class="faq-question"><span>Do you provide maintenance updates?</span><i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer"><p>Yes. All commissioned projects come with 30 days of free support. Extended maintenance packages are available.</p></div>
+                </div>
+
+                <div class="faq-item glass">
+                    <div class="faq-question"><span>What is your typical turnaround time?</span><i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer"><p>Simple bots take 2-4 days. Complex infrastructure projects may take 1-2 weeks depending on the requirements.</p></div>
                 </div>
             </div>
         </section>
@@ -227,7 +234,6 @@
             <div class="contact-card glass perpetual-float">
                 <p style="margin-bottom: 2rem;">Ready to deploy? Establish a secure connection.</p>
                 <div class="btn-row">
-                    <!-- ADDED LINKS -->
                     <a href="https://discord.gg/bUSQ2Q5Qsd" target="_blank" class="btn primary"><i class="fab fa-discord"></i> Discord</a>
                     <a href="https://github.com/Mrfool-wq" target="_blank" class="btn secondary"><i class="fab fa-github"></i> GitHub</a>
                 </div>

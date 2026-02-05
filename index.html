@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mrfool | Discord Bot Developer & Automation Expert</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Professional Discord bot developer specializing in economy systems, moderation, and community automation. Creator of S.M.T.S, Obito, Minato, and more.">
+    <meta name="keywords" content="Discord bots, Python developer, Discord automation, bot development, Mrfool">
+    <meta name="author" content="Mrfool">
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Mrfool | Discord Bot Developer">
+    <meta property="og:description" content="Professional Discord bot developer specializing in economy systems, moderation, and community automation.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com">
+    <meta property="og:image" content="https://yourwebsite.com/og-image.png">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mrfool | Discord Bot Developer">
+    <meta name="twitter:description" content="Professional Discord bot developer specializing in economy systems, moderation, and community automation.">
+    <meta name="twitter:image" content="https://yourwebsite.com/og-image.png">
+    
+    <!-- Favicon - Replace with your actual favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== VARIABLES ===== */
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-card: #1a1a1a;
+            --accent-primary: #6366f1;
+            --accent-secondary: #8b5cf6;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --border-color: #27272a;
+            --success: #10b981;
+            --spacing-unit: 1rem;
+        }
+
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== BACKGROUND ANIMATION ===== */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--bg-primary);
+            overflow: hidden;
+        }
+
+        .grid-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+
+        .gradient-orb {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .orb-1 {
+            background: var(--accent-primary);
+            top: -200px;
+            right: -200px;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            background: var(--accent-secondary);
+            bottom: -200px;
+            left: -200px;
+            animation: float 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(50px, -50px); }
+            66% { transform: translate(-30px, 30px); }
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-primary);
+            object-fit: cover;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ===== BACK TO TOP BUTTON ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #5558e3;
+            transform: translateY(-3px);
+        }
+
+        /* ===== KEYBOARD NAVIGATION HINT ===== */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .keyboard-hint.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .keyboard-hint kbd {
+            background: var(--bg-card);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 6rem 0;
+            min-height: auto;
+        }
+
+        /* ===== HERO SECTION ===== */
+        #hero {
+            padding-top: 10rem;
+            padding-bottom: 8rem;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .profile-image-container {
+            margin-bottom: 2rem;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-primary);
+            object-fit: cover;
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+            animation: profileFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes profileFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            color: var(--success);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.1); }
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .hero-description {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+
+        .timezone-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .timezone-info i {
+            color: var(--accent-primary);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .btn-primary:hover {
+            background: #5558e3;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            transform: translateY(-2px);
+        }
+
+        /* ===== SECTION TITLE ===== */
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .about-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .about-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-5px);
+        }
+
+        .about-card i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .about-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .about-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ===== SKILLS SECTION ===== */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .skill-category h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-primary);
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .skill-tag {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .skill-tag.primary {
+            background: rgba(99, 102, 241, 0.1);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        /* ===== PROJECTS SECTION ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .bot-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--border-color);
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .bot-avatar {
+            border-color: var(--accent-primary);
+            transform: scale(1.05);
+        }
+
+        .status-online {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-role {
+            color: var(--accent-primary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .project-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tech-badge {
+            background: var(--bg-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .invite-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .invite-btn:hover {
+            background: #5558e3;
+            transform: translateY(-2px);
+        }
+
+        /* ===== CONTACT SECTION ===== */
+        #contact {
+            background: var(--bg-secondary);
+        }
+
+        .contact-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .contact-link i {
+            font-size: 1.5rem;
+        }
+
+        .contact-link.discord:hover {
+            border-color: #5865f2;
+        }
+
+        .contact-link.github:hover {
+            border-color: #fff;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-primary);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-primary);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.125rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+            }
+
+            .profile-image {
+                width: 120px;
+                height: 120px;
+            }
+
+            section {
+                padding: 4rem 0;
+            }
+
+            #hero {
+                padding-top: 8rem;
+                padding-bottom: 6rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .projects-grid,
+            .skills-container,
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .back-to-top {
+                bottom: 5rem;
+            }
+
+            .keyboard-hint {
+                display: none;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        /* Gradient backgrounds for project icons */
+        .gradient-purple {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        }
+
+        .gradient-blue {
+            background: linear-gradient(135deg, #3b82f6, #06b6d4);
+        }
+
+        .gradient-pink {
+            background: linear-gradient(135deg, #ec4899, #f43f5e);
+        }
+
+        .gradient-green {
+            background: linear-gradient(135deg, #10b981, #14b8a6);
+        }
+
+        .gradient-orange {
+            background: linear-gradient(135deg, #f59e0b, #ef4444);
+        }
+
+        .gradient-indigo {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="grid-lines"></div>
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <!-- Replace 'avatar-placeholder.png' with your actual profile picture -->
+                <img src="avatar-placeholder.png" alt="Mrfool" class="logo-img" onerror="this.style.display='none'">
+                MRFOOL
+            </div>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Keyboard Navigation Hint -->
+    <div class="keyboard-hint" id="keyboardHint">
+        Press <kbd>1-5</kbd> to navigate sections
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container">
+            <div class="hero-content fade-in">
+                <div class="profile-image-container">
+                    <!-- Replace 'mrfool-profile.png' with your actual profile picture -->
+                    <img src="mrfool-profile.png" alt="Mrfool Profile" class="profile-image" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%236366f1%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2250%22 fill=%22white%22>MF</text></svg>'">
+                </div>
+                <div class="status-badge">
+                    <span class="status-dot"></span>
+                    Available for Projects
+                </div>
+                <h1 class="hero-title">Mrfool</h1>
+                <p class="hero-subtitle">Discord Bot Developer & Systems Enthusiast</p>
+                <p class="hero-description">
+                    Crafting powerful Discord bots and automation solutions. Passionate about anime, sports, and building digital experiences that bring communities together.
+                </p>
+                <div class="timezone-info">
+                    <i class="fas fa-clock"></i>
+                    <span>Available: 9 AM - 11 PM IST (UTC+5:30)</span>
+                </div>
+                <div class="cta-buttons">
+                    <a href="#projects" class="btn btn-primary">
+                        <i class="fas fa-robot"></i> View My Bots
+                    </a>
+                    <a href="https://github.com/Mrfool-wq" target="_blank" class="btn btn-secondary">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>What I Do</h2>
+                <p>Building the backbone of thriving Discord communities</p>
+            </div>
+            <div class="about-grid">
+                <div class="about-card">
+                    <i class="fab fa-discord"></i>
+                    <h3>Discord Bot Developer</h3>
+                    <p>Creating custom bots for moderation, economy systems, leveling, and community engagement</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-dragon"></i>
+                    <h3>Anime Enthusiast</h3>
+                    <p>Bringing anime-themed features and culture into Discord communities</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-futbol"></i>
+                    <h3>Sports Fan</h3>
+                    <p>Following Real Madrid, Man City, and Indian Cricket with passion</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-server"></i>
+                    <h3>Server Admin</h3>
+                    <p>Managing Minecraft servers and optimizing performance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <div class="section-title">
+                <h2>Tech Stack</h2>
+                <p>Languages, frameworks, and tools I work with</p>
+            </div>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Primary Languages</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag primary"><i class="fab fa-python"></i> Python</span>
+                        <span class="skill-tag primary"><i class="fab fa-java"></i> Java</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Additional Skills</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag"><i class="fab fa-rust"></i> Rust</span>
+                        <span class="skill-tag"><i class="fas fa-database"></i> SQL</span>
+                        <span class="skill-tag"><i class="fab fa-html5"></i> HTML</span>
+                        <span class="skill-tag"><i class="fab fa-css3-alt"></i> CSS</span>
+                        <span class="skill-tag"><i class="fab fa-js"></i> JavaScript</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Platforms & Tools</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag"><i class="fab fa-discord"></i> Discord.py</span>
+                        <span class="skill-tag"><i class="fas fa-cubes"></i> Minecraft</span>
+                        <span class="skill-tag"><i class="fab fa-git-alt"></i> Git</span>
+                        <span class="skill-tag"><i class="fab fa-linux"></i> Linux</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Projects</h2>
+                <p>Discord bots powering communities worldwide</p>
+            </div>
+            <div class="projects-grid">
+                <!-- S.M.T.S Bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <!-- Replace with actual bot avatar -->
+                        <img src="smts-bot-avatar.png" alt="S.M.T.S Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%236366f1%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>📈</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>S.M.T.S</h3>
+                    <p class="project-role">Stock Market Trading Simulator</p>
+                    <p>Advanced stock market simulation bot with real-time data, portfolio management, and trading mechanics for Discord communities.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">50+</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">10K+</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Discord.py</span>
+                        <span class="tech-badge">API Integration</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+
+                <!-- Obito Bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <!-- Replace with actual bot avatar -->
+                        <img src="obito-bot-avatar.png" alt="Obito Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23ec4899%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>🎭</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>Obito</h3>
+                    <p class="project-role">Anime-Style Welcome Bot</p>
+                    <p>Customizable welcome bot with anime-themed graphics, role assignment, and server introduction features.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">100+</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">25K+</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">PIL</span>
+                        <span class="tech-badge">Discord.py</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+
+                <!-- Minato Bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <!-- Replace with actual bot avatar -->
+                        <img src="minato-bot-avatar.png" alt="Minato Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%233b82f6%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>⚡</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>Minato</h3>
+                    <p class="project-role">Utility & Leveling System</p>
+                    <p>Comprehensive utility bot featuring economy system, user leveling, XP tracking, and reward mechanics.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">75+</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">15K+</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">SQLite</span>
+                        <span class="tech-badge">Discord.py</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+
+                <!-- Brook Bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <!-- Replace with actual bot avatar -->
+                        <img src="brook-bot-avatar.png" alt="Brook Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23f59e0b%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>👥</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>Brook</h3>
+                    <p class="project-role">Invite Tracking System</p>
+                    <p>Tracks user invites, manages referral rewards, and provides detailed analytics on server growth.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">60+</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">12K+</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Database</span>
+                        <span class="tech-badge">Analytics</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+
+                <!-- Ticket System -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <!-- Replace with actual bot avatar -->
+                        <img src="ticket-bot-avatar.png" alt="Ticket Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%236366f1%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>🎫</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>Ticket System</h3>
+                    <p class="project-role">Support & Help Desk</p>
+                    <p>Professional ticket system with private support channels, transcript logging, and staff management.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">90+</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">20K+</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Discord.py</span>
+                        <span class="tech-badge">Logging</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=YOUR_BOT_ID" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="section-title">
+                    <h2>Let's Connect</h2>
+                    <p>Have a project in mind? Looking for a Discord bot? Let's work together!</p>
+                </div>
+                <div class="contact-links">
+                    <a href="https://discord.gg/bUSQ2Q5Qsd" target="_blank" class="contact-link discord">
+                        <i class="fab fa-discord"></i>
+                        Join My Discord
+                    </a>
+                    <a href="https://github.com/Mrfool-wq" target="_blank" class="contact-link github">
+                        <i class="fab fa-github"></i>
+                        View GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">&copy; 2025 Mrfool. Building the future, one bot at a time.</p>
+                <div class="footer-links">
+                    <a href="https://github.com/Mrfool-wq" target="_blank" class="footer-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://discord.gg/bUSQ2Q5Qsd" target="_blank" class="footer-link">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== NAVBAR SCROLL EFFECT =====
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // ===== SMOOTH SCROLL FOR NAVIGATION LINKS =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ===== BACK TO TOP BUTTON =====
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // ===== KEYBOARD NAVIGATION =====
+        const keyboardHint = document.getElementById('keyboardHint');
+        let hintTimeout;
+
+        // Show hint on first interaction
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                keyboardHint.classList.add('visible');
+                hintTimeout = setTimeout(() => {
+                    keyboardHint.classList.remove('visible');
+                }, 3000);
+            }, 1000);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const sections = ['hero', 'about', 'skills', 'projects', 'contact'];
+            const key = e.key;
+            
+            // Show hint temporarily when using keyboard navigation
+            if (['1', '2', '3', '4', '5'].includes(key)) {
+                clearTimeout(hintTimeout);
+                keyboardHint.classList.add('visible');
+                hintTimeout = setTimeout(() => {
+                    keyboardHint.classList.remove('visible');
+                }, 2000);
+            }
+            
+            // Navigate to sections
+            if (key === '1') {
+                document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+            } else if (key === '2') {
+                document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+            } else if (key === '3') {
+                document.getElementById('skills').scrollIntoView({ behavior: 'smooth' });
+            } else if (key === '4') {
+                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+            } else if (key === '5') {
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // ===== INTERSECTION OBSERVER FOR FADE-IN ANIMATIONS =====
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.project-card, .about-card, .skill-category').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // ===== MOBILE MENU TOGGLE =====
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'rgba(10, 10, 10, 0.98)';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.padding = '2rem';
+                navLinks.style.borderTop = '1px solid var(--border-color)';
+            }
+        });
+
+        // ===== UPDATE CURRENT TIME IN REAL-TIME (Optional Enhancement) =====
+        function updateTimezone() {
+            const timezoneElement = document.querySelector('.timezone-info span');
+            const now = new Date();
+            const hours = now.getHours();
+            
+            // Check if within available hours (9 AM - 11 PM IST)
+            const istHours = (hours + 5.5) % 24; // Convert to IST (rough approximation)
+            
+            if (istHours >= 9 && istHours < 23) {
+                timezoneElement.innerHTML = '🟢 Currently Available (9 AM - 11 PM IST)';
+            } else {
+                timezoneElement.innerHTML = '🔴 Currently Offline (Available 9 AM - 11 PM IST)';
+            }
+        }
+        
+        // Update timezone status every minute
+        updateTimezone();
+        setInterval(updateTimezone, 60000);
+    </script>
+</body>
+</html>

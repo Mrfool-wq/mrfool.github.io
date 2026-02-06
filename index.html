@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mrfool | Discord Bot Developer</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Professional Discord bot developer specializing in economy systems, moderation, and community automation. Creator of S.M.T.S, Obito, Minato, and more.">
+    <meta name="keywords" content="Discord bots, Python developer, Discord automation, bot development, Mrfool">
+    <meta name="author" content="Mrfool">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Mrfool | Discord Bot Developer">
+    <meta property="og:description" content="Professional Discord bot developer specializing in economy systems, moderation, and community automation.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com">
+    <meta property="og:image" content="https://yourwebsite.com/og-image.png">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mrfool | Discord Bot Developer">
+    <meta name="twitter:description" content="Professional Discord bot developer specializing in economy systems, moderation, and community automation.">
+    <meta name="twitter:image" content="https://yourwebsite.com/og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #1a2332;
+            --bg-darker: #0f1419;
+            --bg-card: #1f2937;
+            --accent-coral: #ff6b6b;
+            --accent-orange: #ff8e53;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            --border-subtle: #374151;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-darker);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== LOADING SCREEN ===== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-darker);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border-subtle);
+            border-top: 4px solid var(--accent-coral);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-top: 2rem;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem 0;
+            background: rgba(15, 20, 25, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-subtle);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 1rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-coral);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ===== HERO SECTION ===== */
+        #hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative Lines */
+        .hero-decoration {
+            position: absolute;
+            opacity: 0.1;
+        }
+
+        .line-left {
+            left: 10%;
+            top: 30%;
+            width: 80px;
+            height: 2px;
+            background: var(--accent-coral);
+            transform: rotate(-45deg);
+        }
+
+        .line-right-top {
+            right: 15%;
+            top: 25%;
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--accent-coral);
+            border-radius: 50%;
+        }
+
+        .line-right-bottom {
+            right: 10%;
+            bottom: 30%;
+            width: 100px;
+            height: 2px;
+            background: var(--accent-orange);
+            transform: rotate(45deg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content {
+            animation: fadeInLeft 0.8s ease-out;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hello-text {
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .hello-text::after {
+            content: '.';
+            color: var(--accent-coral);
+        }
+
+        .name-text {
+            font-size: 1.75rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .title-text {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-item {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-coral);
+            color: var(--text-primary);
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border-subtle);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-coral);
+            transform: translateY(-2px);
+        }
+
+        /* ===== HERO IMAGE SECTION ===== */
+        .hero-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            animation: fadeInRight 0.8s ease-out;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .profile-circle {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .circle-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-orange));
+            opacity: 0.2;
+            animation: pulse-circle 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse-circle {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.2;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.3;
+            }
+        }
+
+        .profile-image {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--bg-darker);
+            z-index: 2;
+            margin: 25px;
+            box-shadow: 0 20px 60px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Decorative elements around profile */
+        .circle-decoration {
+            position: absolute;
+            border: 2px solid var(--accent-coral);
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .deco-1 {
+            width: 30px;
+            height: 30px;
+            top: 10%;
+            left: -5%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .deco-2 {
+            width: 20px;
+            height: 20px;
+            bottom: 15%;
+            right: -5%;
+            animation: float 4s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        #about {
+            padding: 6rem 0;
+            background: var(--bg-dark);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .about-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0;
+            background: var(--accent-coral);
+            transition: height 0.3s ease;
+        }
+
+        .about-card:hover::before {
+            height: 100%;
+        }
+
+        .about-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-coral);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .about-card i {
+            font-size: 2.5rem;
+            color: var(--accent-coral);
+            margin-bottom: 1rem;
+        }
+
+        .about-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .about-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ===== STATS SECTION ===== */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-coral);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-coral);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* ===== SKILLS SECTION ===== */
+        #skills {
+            padding: 6rem 0;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-left: 4px solid var(--accent-coral);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .skill-category h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-coral);
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .skill-tag {
+            background: var(--bg-darker);
+            border: 1px solid var(--border-subtle);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .skill-tag:hover {
+            border-color: var(--accent-coral);
+            color: var(--accent-coral);
+            transform: translateY(-2px);
+        }
+
+        .skill-tag.primary {
+            background: rgba(255, 107, 107, 0.1);
+            border-color: var(--accent-coral);
+            color: var(--accent-coral);
+            font-weight: 600;
+        }
+
+        /* ===== PROJECTS SECTION ===== */
+        #projects {
+            padding: 6rem 0;
+            background: var(--bg-dark);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-coral), var(--accent-orange));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-coral);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .bot-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 3px solid var(--border-subtle);
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover .bot-avatar {
+            border-color: var(--accent-coral);
+            transform: scale(1.05);
+        }
+
+        .status-online {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-role {
+            color: var(--accent-coral);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bg-darker);
+            border-radius: 6px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent-coral);
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-badge {
+            background: var(--bg-darker);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .invite-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--accent-coral);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .invite-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+        }
+
+        /* ===== CONTACT SECTION ===== */
+        #contact {
+            padding: 6rem 0;
+        }
+
+        .contact-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.25rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            border-color: var(--accent-coral);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.2);
+        }
+
+        .contact-link i {
+            font-size: 1.5rem;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-darker);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-coral);
+        }
+
+        /* ===== BACK TO TOP BUTTON ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--accent-coral);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #ff5252;
+            transform: translateY(-3px);
+        }
+
+        /* ===== KEYBOARD HINT ===== */
+        .keyboard-hint {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .keyboard-hint.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .keyboard-hint kbd {
+            background: var(--bg-darker);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border-subtle);
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.75rem;
+            margin: 0 0.25rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 968px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                text-align: center;
+            }
+
+            .hero-content {
+                order: 2;
+            }
+
+            .hero-image-container {
+                order: 1;
+            }
+
+            .profile-circle {
+                width: 300px;
+                height: 300px;
+            }
+
+            .profile-image {
+                width: 260px;
+                height: 260px;
+            }
+
+            .title-text {
+                font-size: 2.5rem;
+            }
+
+            .cta-buttons {
+                justify-content: center;
+            }
+
+            .tech-stack {
+                justify-content: center;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .title-text {
+                font-size: 2rem;
+            }
+
+            .hello-text {
+                font-size: 1.5rem;
+            }
+
+            .name-text {
+                font-size: 1.25rem;
+            }
+
+            section {
+                padding: 4rem 0;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .projects-grid,
+            .skills-grid,
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .back-to-top {
+                bottom: 5rem;
+            }
+
+            .keyboard-hint {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <div class="loading-text">Loading...</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Mrfool</div>
+            <ul class="nav-links">
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contacts</a></li>
+            </ul>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Keyboard Navigation Hint -->
+    <div class="keyboard-hint" id="keyboardHint">
+        Press <kbd>1-5</kbd> to navigate sections
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="hero-decoration line-left"></div>
+        <div class="hero-decoration line-right-top"></div>
+        <div class="hero-decoration line-right-bottom"></div>
+        
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1 class="hello-text">Hello</h1>
+                    <p class="name-text">I'm Mrfool</p>
+                    <h2 class="title-text">Discord Bot Developer</h2>
+                    <p class="hero-description">
+                        I build powerful Discord bots and automation solutions that bring communities together. Passionate about anime, sports, and creating amazing digital experiences.
+                    </p>
+                    <div class="tech-stack">
+                        <span class="tech-item">Python</span>
+                        <span class="tech-item">Java</span>
+                        <span class="tech-item">JavaScript</span>
+                        <span class="tech-item">Rust</span>
+                        <span class="tech-item">SQL</span>
+                        <span class="tech-item">Discord.py</span>
+                    </div>
+                    <div class="cta-buttons">
+                        <a href="#projects" class="btn btn-primary">
+                            Get a project
+                        </a>
+                        <a href="https://github.com/Mrfool-wq" target="_blank" class="btn btn-secondary">
+                            My resume
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hero-image-container">
+                    <div class="profile-circle">
+                        <div class="circle-bg"></div>
+                        <img src="profile.jpg" alt="Mrfool" class="profile-image" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23ff6b6b%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>MF</text></svg>'">
+                        <div class="circle-decoration deco-1"></div>
+                        <div class="circle-decoration deco-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About me</h2>
+                <p>Building the backbone of thriving Discord communities</p>
+            </div>
+            
+            <div class="about-grid">
+                <div class="about-card">
+                    <i class="fab fa-discord"></i>
+                    <h3>Discord Bot Developer</h3>
+                    <p>Creating custom bots for moderation, economy systems, leveling, and community engagement</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-dragon"></i>
+                    <h3>Anime Enthusiast</h3>
+                    <p>Bringing anime-themed features and culture into Discord communities</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-futbol"></i>
+                    <h3>Sports Fan</h3>
+                    <p>Following Real Madrid, Man City, and Indian Cricket with passion</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-server"></i>
+                    <h3>Server Admin</h3>
+                    <p>Managing Minecraft servers and optimizing performance</p>
+                </div>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">6+</div>
+                    <div class="stat-label">Active Bots</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">28+</div>
+                    <div class="stat-label">Servers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">120+</div>
+                    <div class="stat-label">Users</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <div class="section-title">
+                <h2>Tech Stack</h2>
+                <p>Languages, frameworks, and tools I work with</p>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Primary Languages</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag primary"><i class="fab fa-python"></i> Python</span>
+                        <span class="skill-tag primary"><i class="fab fa-java"></i> Java</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Additional Skills</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag"><i class="fab fa-rust"></i> Rust</span>
+                        <span class="skill-tag"><i class="fas fa-database"></i> SQL</span>
+                        <span class="skill-tag"><i class="fab fa-html5"></i> HTML</span>
+                        <span class="skill-tag"><i class="fab fa-css3-alt"></i> CSS</span>
+                        <span class="skill-tag"><i class="fab fa-js"></i> JavaScript</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Platforms & Tools</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag"><i class="fab fa-discord"></i> Discord.py</span>
+                        <span class="skill-tag"><i class="fas fa-cubes"></i> Minecraft</span>
+                        <span class="skill-tag"><i class="fab fa-git-alt"></i> Git</span>
+                        <span class="skill-tag"><i class="fab fa-linux"></i> Linux</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <div class="container">
+            <div class="section-title">
+                <h2>Projects</h2>
+                <p>Discord bots powering communities worldwide</p>
+            </div>
+            <div class="projects-grid">
+                <!-- S.M.T.S Bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <img src="smts.jpg" alt="S.M.T.S Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23ff6b6b%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>📈</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>S.M.T.S</h3>
+                    <p class="project-role">Stock Market Trading Simulator</p>
+                    <p>Advanced stock market simulation bot with real-time data, portfolio management, and trading mechanics.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">9</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">25</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Discord.py</span>
+                        <span class="tech-badge">API Integration</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=1447459573094023305&permissions=388112&integration_type=0&scope=bot+applications.commands" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+
+                <!-- Obito Bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <img src="obito.jpg" alt="Obito Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23ff6b6b%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>🎭</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>Obito</h3>
+                    <p class="project-role">Anime-Style Welcome Bot</p>
+                    <p>Customizable welcome bot with anime-themed graphics, role assignment, and server introduction features.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">8</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">30</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">PIL</span>
+                        <span class="tech-badge">Discord.py</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=1442486886323982426&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+
+                <!-- Minato Bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <img src="minato.jpg" alt="Minato Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23ff6b6b%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>⚡</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>Minato</h3>
+                    <p class="project-role">Utility & Leveling System</p>
+                    <p>Comprehensive utility bot featuring economy system, user leveling, XP tracking, and reward mechanics.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">2</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">10</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">SQLite</span>
+                        <span class="tech-badge">Discord.py</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=1444262996984598629&permissions=269863936&integration_type=0&scope=bot+applications.commands" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+
+                <!-- Usopp Bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <img src="usopp.jpg" alt="Usopp Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23ff6b6b%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>🎯</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>Usopp</h3>
+                    <p class="project-role">Community Engagement Bot</p>
+                    <p>Interactive bot with fun commands, mini-games, and community building features to keep your server active.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">3</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">15</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Discord.py</span>
+                        <span class="tech-badge">Games</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=1441699923409113179&permissions=536964160&integration_type=0&scope=bot+applications.commands" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+
+                <!-- Brook Bot -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <img src="brook.jpg" alt="Brook Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23ff6b6b%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>👥</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>Brook</h3>
+                    <p class="project-role">Invite Tracking System</p>
+                    <p>Tracks user invites, manages referral rewards, and provides detailed analytics on server growth.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">3</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">20</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Database</span>
+                        <span class="tech-badge">Analytics</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=1441095933394681937&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+
+                <!-- Ticket System -->
+                <div class="project-card">
+                    <div class="project-header">
+                        <img src="ticket.jpg" alt="Ticket Bot" class="bot-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23ff6b6b%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2240%22 fill=%22white%22>🎫</text></svg>'">
+                        <span class="status-online">Online</span>
+                    </div>
+                    <h3>Ticket System</h3>
+                    <p class="project-role">Support & Help Desk</p>
+                    <p>Professional ticket system with private support channels, transcript logging, and staff management.</p>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">3</span>
+                            <span class="stat-label">Servers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">20</span>
+                            <span class="stat-label">Users</span>
+                        </div>
+                    </div>
+
+                    <div class="project-tech">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Discord.py</span>
+                        <span class="tech-badge">Logging</span>
+                    </div>
+                    
+                    <a href="https://discord.com/oauth2/authorize?client_id=1442163864044048495&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" class="invite-btn">
+                        <i class="fas fa-plus-circle"></i> Invite to Server
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="section-title">
+                    <h2>Contacts</h2>
+                    <p>Have a project in mind? Looking for a Discord bot? Let's work together!</p>
+                </div>
+                <div class="contact-links">
+                    <a href="https://discord.gg/bUSQ2Q5Qsd" target="_blank" class="contact-link">
+                        <i class="fab fa-discord"></i>
+                        Join My Discord
+                    </a>
+                    <a href="https://github.com/Mrfool-wq" target="_blank" class="contact-link">
+                        <i class="fab fa-github"></i>
+                        View GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-text">&copy; 2025 Mrfool. Building the future, one bot at a time.</p>
+                <div class="footer-links">
+                    <a href="https://github.com/Mrfool-wq" target="_blank" class="footer-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://discord.gg/bUSQ2Q5Qsd" target="_blank" class="footer-link">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 1500);
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Back to top button
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Keyboard navigation
+        const keyboardHint = document.getElementById('keyboardHint');
+        let hintTimeout;
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                keyboardHint.classList.add('visible');
+                hintTimeout = setTimeout(() => {
+                    keyboardHint.classList.remove('visible');
+                }, 4000);
+            }, 2000);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            const key = e.key;
+            
+            if (['1', '2', '3', '4', '5'].includes(key)) {
+                clearTimeout(hintTimeout);
+                keyboardHint.classList.add('visible');
+                hintTimeout = setTimeout(() => {
+                    keyboardHint.classList.remove('visible');
+                }, 2000);
+            }
+            
+            if (key === '1') {
+                document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+            } else if (key === '2') {
+                document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+            } else if (key === '3') {
+                document.getElementById('skills').scrollIntoView({ behavior: 'smooth' });
+            } else if (key === '4') {
+                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+            } else if (key === '5') {
+                document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.project-card, .about-card, .skill-category, .stat-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // Mobile menu
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            if (navLinks.style.display === 'flex') {
+                navLinks.style.display = 'none';
+            } else {
+                navLinks.style.display = 'flex';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'rgba(15, 20, 25, 0.98)';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.padding = '2rem';
+                navLinks.style.borderTop = '1px solid var(--border-subtle)';
+                navLinks.style.gap = '1rem';
+            }
+        });
+    </script>
+</body>
+</html>
